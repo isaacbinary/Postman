@@ -1,0 +1,102 @@
+{
+	"info": {
+		"_postman_id": "726a04eb-bd12-4c79-87b9-83324303c1ce",
+		"name": "Postman Scripting",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Multiple Assertions",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.globals.set(\"userid\", 2);"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"//status code validation\r",
+							"\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"//multiple assertions (chai BDD framework)\r",
+							"\r",
+							"pm.test(\"Validate multiple fields in response\", function () {\r",
+							"   responseJson =  pm.response.json();\r",
+							"   pm.expect(responseJson.data.id).to.eql(2);\r",
+							"   pm.expect(responseJson.data.email).to.eql(\"janet.weaver@reqres.in\");\r",
+							"   pm.expect(responseJson.data.first_name).to.eql(\"Janet\");\r",
+							"   pm.expect(responseJson.data.last_name).to.eql(\"Weaver\");\r",
+							"});\r",
+							"\r",
+							"//handling responses that don't parse\r",
+							"\r",
+							"pm.test(\"Body contains string\", function () {\r",
+							"   pm.expect(pm.response.text()).to.include(\"janet.weaver@reqres.in\");\r",
+							"});\r",
+							"\r",
+							"//status code being one of a set\r",
+							"\r",
+							"pm.test(\"Successful status code\", function () {\r",
+							"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);\r",
+							"});\r",
+							"\r",
+							"//validating headers\r",
+							"\r",
+							"pm.test(\"Content-Type header present\", function () {\r",
+							"    pm.response.to.have.header(\"Content-Type\")\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Content-Type value present\", function () {\r",
+							"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.eql(\"application/json; charset=utf-8\");\r",
+							"});\r",
+							"\r",
+							"//validating cookies\r",
+							"\r",
+							"pm.test(\"Cookie is present\", function () {\r",
+							"    pm.expect(pm.cookies.has(\"_cfduid\")).to.be.true;\r",
+							"});\r",
+							"\r",
+							"//response time\r",
+							"\r",
+							"pm.test(\"Response time is less than 20 ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(20);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://reqres.in/api/users/{{userid}}",
+					"protocol": "https",
+					"host": [
+						"reqres",
+						"in"
+					],
+					"path": [
+						"api",
+						"users",
+						"{{userid}}"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
